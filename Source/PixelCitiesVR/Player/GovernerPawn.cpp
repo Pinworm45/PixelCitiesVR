@@ -75,14 +75,14 @@ void AGovernerPawn::SetupPlayerInputComponent(class UInputComponent* InputCompon
 
 	InputComponent->BindAxis("MoveForward", this, &AGovernerPawn::MoveForward);
 	InputComponent->BindAxis("MoveRight", this, &AGovernerPawn::MoveRight);
-	InputComponent->BindAxis("Zoom", this, &AGovernerPawn::Zoom);
+	InputComponent->BindAxis("ScrollWheel", this, &AGovernerPawn::Zoom);
 	InputComponent->BindAxis("Rotate", this, &AGovernerPawn::Rotate);
 
 	InputComponent->BindAction("LeftClick", IE_Pressed, this, &AGovernerPawn::OnLeftClickPress);
 	InputComponent->BindAction("LeftClick", IE_Released, this, &AGovernerPawn::OnLeftClickRelease);
 	InputComponent->BindAction("RightClick", IE_Pressed, this, &AGovernerPawn::OnRightClick);
-	InputComponent->BindAction("MouseWheelClick", IE_Pressed, this, &AGovernerPawn::OnMiddleClickPress);
-	InputComponent->BindAction("MouseWheelClick", IE_Released, this, &AGovernerPawn::OnMiddleClickRelease);
+	InputComponent->BindAction("MiddleMouseClick", IE_Pressed, this, &AGovernerPawn::OnMiddleClickPress);
+	InputComponent->BindAction("MiddleMouseClick", IE_Released, this, &AGovernerPawn::OnMiddleClickRelease);
 	InputComponent->BindAction("BuildModifier", IE_Pressed, this, &AGovernerPawn::OnBuildModifierPress);
 	InputComponent->BindAction("BuildModifier", IE_Released, this, &AGovernerPawn::OnBuildModifierRelease);
 }
