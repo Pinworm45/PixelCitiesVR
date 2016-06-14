@@ -44,6 +44,7 @@ void AGovernerPawn::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	PC = Cast<AGovernerController>(GetController());
 }
 
 // Called every frame
@@ -55,6 +56,7 @@ void AGovernerPawn::Tick( float DeltaTime )
 	{
 		if (BuildingGhost != nullptr)
 		{
+			UE_LOG(LogTemp, Log, TEXT("BuildingGhost found on tick, getting mouse loc"));
 			FVector GridLoc = FVector(GetMouseHit().Location.X + ((50 / 200) * 200), GetMouseHit().Location.Y + ((50 / 200) * 200), GetMouseHit().Location.Z);
 			BuildingGhost->SetActorLocation(GridLoc);
 		}
@@ -62,8 +64,8 @@ void AGovernerPawn::Tick( float DeltaTime )
 
 	if (bDraggingBuilding)
 	{
-		DistX = GetMouseHit().Location.X - CurrentMouseLoc.X;
-		DistY = GetMouseHit().Location.Y - CurrentMouseLoc.Y;
+//		DistX = GetMouseHit().Location.X - CurrentMouseLoc.X;
+//		DistY = GetMouseHit().Location.Y - CurrentMouseLoc.Y;
 		//		UE_LOG(LogTemp, Log, TEXT("DistX %f"), DistX);
 	}
 }
@@ -91,7 +93,12 @@ FHitResult AGovernerPawn::GetMouseHit()
 {
 	FVector MouseLocation = FVector::ZeroVector;
 	FVector MouseDirection = FVector::ZeroVector;
-	PC->DeprojectMousePositionToWorld(MouseLocation, MouseDirection);
+	UE_LOG(LogTemp, Log, TEXT("Prepare to Deproject"));
+	if (PC)
+	{
+		PC->DeprojectMousePositionToWorld(MouseLocation, MouseDirection);
+	}
+	UE_LOG(LogTemp, Log, TEXT("Deprojected"));
 	FHitResult HitResult;
 	FCollisionQueryParams QueryParams;
 	FVector TraceStart = MouseLocation;
@@ -141,17 +148,20 @@ void AGovernerPawn::SelectedForPlacement(const TSubclassOf<ABaseBuilding> Buildi
 {
 	if (BuildingToMake)
 	{
+		UE_LOG(LogTemp, Log, TEXT("Building to make found"));
 		CurrentBuildingType = BuildingToMake;
 		BuildingGhost = GetWorld()->SpawnActor<ABaseBuilding>(BuildingToMake);
 		BuildingGhost->BuildingMesh->SetMaterial(0, BuildingGhost->PlacingMaterial);
 		BuildingGhost->bGhostBuilding = true;
 		bPlacingBuilding = true;
+		UE_LOG(LogTemp, Log, TEXT("PlacingBuilding"));
 	}
 }
 
 // Used to interact with and place buildings
 void AGovernerPawn::OnLeftClickPress()
 {
+	/*
 	// If we're placing a building
 	if (bPlacingBuilding)
 	{
@@ -169,6 +179,7 @@ void AGovernerPawn::OnLeftClickPress()
 			}
 		}
 	}
+	*/
 }
 
 void AGovernerPawn::OnLeftClickRelease()
