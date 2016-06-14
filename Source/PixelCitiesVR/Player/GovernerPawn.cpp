@@ -31,13 +31,8 @@ AGovernerPawn::AGovernerPawn(const FObjectInitializer& ObjectInitializer) : Supe
 	bCanRotate = false;
 
 	CurrentMoney = 1500;
-	InitialTaxUpgradeCost = 50;
-	CurrentTaxUpgradeCost = 50;
 
 	bBuildModifier = false;
-
-	DistX = 0.0f;
-
 	bBuildMode = false;
 }
 
@@ -58,19 +53,29 @@ void AGovernerPawn::Tick( float DeltaTime )
 	{
 		if (BuildingGhost != nullptr)
 		{
+			// nearest grid size to snap to
 			int32 Nearest = 500;
-			FVector Loc = GetMouseHit().Location;
-			FVector GridLoc = FVector(RoundToNearest(Loc.X, 500), RoundToNearest(Loc.Y, 500), Loc.Z);
+			FVector Loc = FVector::ZeroVector;
+			// If we're using HMD (VR) controls
+			if (GEngine->HMDDevice.IsValid())
+			{
+				Loc = GetHMDHit().Location;
+			}
+			// If we're using non VR controls
+			else
+			{
+				Loc = GetMouseHit().Location;
+			}
 
+			// set currently placing building to desired location
+			FVector GridLoc = FVector(RoundToNearest(Loc.X, 500), RoundToNearest(Loc.Y, 500), Loc.Z);
 			BuildingGhost->SetActorLocation(GridLoc);
 		}
 	}
 
 	if (bDraggingBuilding)
 	{
-//		DistX = GetMouseHit().Location.X - CurrentMouseLoc.X;
-//		DistY = GetMouseHit().Location.Y - CurrentMouseLoc.Y;
-		//		UE_LOG(LogTemp, Log, TEXT("DistX %f"), DistX);
+
 	}
 }
 
@@ -115,6 +120,16 @@ FHitResult AGovernerPawn::GetMouseHit()
 	FCollisionQueryParams QueryParams;
 	FVector TraceStart = MouseLocation;
 	FVector TraceEnd = MouseLocation + (MouseDirection * 100000);
+	GetWorld()->LineTraceSingleByChannel(HitResult, TraceStart, TraceEnd, ECC_GameTraceChannel2, QueryParams);
+	return HitResult;
+}
+
+FHitResult AGovernerPawn::GetHMDHit()
+{
+	FHitResult HitResult;
+	FCollisionQueryParams QueryParams;
+	FVector TraceStart = Camera->GetComponentLocation();
+	FVector TraceEnd = Camera->GetComponentLocation() + (Camera->GetForwardVector() * 100000);
 	GetWorld()->LineTraceSingleByChannel(HitResult, TraceStart, TraceEnd, ECC_GameTraceChannel2, QueryParams);
 	return HitResult;
 }
@@ -178,13 +193,9 @@ void AGovernerPawn::OnLeftClickPress()
 		if (!bDraggingBuilding)
 		{
 			bDraggingBuilding = true;
-			CurrentMouseLoc = GetMouseHit().Location;
 
 			//			for (int32 i = 0; i < DistX; i++)
 			{
-				//				BuildingGhosts.SetNumUninitialized(i);
-				//				BuildingGhosts[i] = GetWorld()->SpawnActor<ABaseBuilding>(BuildingGhost->GetClass());
-				//				BuildingGhosts[i]->SetActorLocation(CurrentMouseLoc + (50 * i));
 
 			}
 		}

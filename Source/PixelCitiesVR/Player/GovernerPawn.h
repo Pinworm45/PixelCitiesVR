@@ -122,25 +122,16 @@ public:
 	UPROPERTY(BlueprintReadWrite, Category = "City")
 		int32 CurrentMoney;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "City")
-		TArray<int32> StoredResources;
-
-	UPROPERTY(BlueprintReadOnly, Category = "City")
-		int32 InitialTaxUpgradeCost;
-
-	UPROPERTY(BlueprintReadWrite, Category = "City")
-		int32 CurrentTaxUpgradeCost;
-
+	// store subclass of building
 	TSubclassOf<class ABaseBuilding> CurrentBuildingType;
 
+	// get mouse hit location on landscape
 	UFUNCTION()
 	FHitResult GetMouseHit();
 
-	float DistX;
-
-	float DistY;
-
-	FVector CurrentMouseLoc;
+	// get head mounted display location on landscape
+	UFUNCTION()
+	FHitResult GetHMDHit();
 
 	// done to allow for better 3D menu support with mouse
 	UPROPERTY(BlueprintReadWrite, Category = "Controls")
