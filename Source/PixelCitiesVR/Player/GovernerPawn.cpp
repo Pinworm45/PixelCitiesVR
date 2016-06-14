@@ -139,11 +139,14 @@ void AGovernerPawn::Zoom(float Val)
 // called when item is clicked on in interface
 void AGovernerPawn::SelectedForPlacement(const TSubclassOf<ABaseBuilding> BuildingToMake)
 {
-	CurrentBuildingType = BuildingToMake;
-	BuildingGhost = GetWorld()->SpawnActor<ABaseBuilding>(BuildingToMake);
-	BuildingGhost->BuildingMesh->SetMaterial(0, BuildingGhost->PlacingMaterial);
-	BuildingGhost->bGhostBuilding = true;
-	bPlacingBuilding = true;
+	if (BuildingToMake)
+	{
+		CurrentBuildingType = BuildingToMake;
+		BuildingGhost = GetWorld()->SpawnActor<ABaseBuilding>(BuildingToMake);
+		BuildingGhost->BuildingMesh->SetMaterial(0, BuildingGhost->PlacingMaterial);
+		BuildingGhost->bGhostBuilding = true;
+		bPlacingBuilding = true;
+	}
 }
 
 // Used to interact with and place buildings
