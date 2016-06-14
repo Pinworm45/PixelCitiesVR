@@ -142,4 +142,8 @@ public:
 
 	FVector CurrentMouseLoc;
 
+	// done to allow for better 3D menu support with mouse
+	UPROPERTY(BlueprintReadWrite, Category = "Controls")
+	bool bBuildMode;
+
 };

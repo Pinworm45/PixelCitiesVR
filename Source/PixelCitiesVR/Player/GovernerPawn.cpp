@@ -37,6 +37,8 @@ AGovernerPawn::AGovernerPawn(const FObjectInitializer& ObjectInitializer) : Supe
 	bBuildModifier = false;
 
 	DistX = 0.0f;
+
+	bBuildMode = false;
 }
 
 // Called when the game starts or when spawned
@@ -56,8 +58,8 @@ void AGovernerPawn::Tick( float DeltaTime )
 	{
 		if (BuildingGhost != nullptr)
 		{
-			UE_LOG(LogTemp, Log, TEXT("BuildingGhost found on tick, getting mouse loc"));
-			FVector GridLoc = FVector(GetMouseHit().Location.X + ((50 / 200) * 200), GetMouseHit().Location.Y + ((50 / 200) * 200), GetMouseHit().Location.Z);
+//			FVector GridLoc = FVector(GetMouseHit().Location.X + ((50 / 200) * 200), GetMouseHit().Location.Y + ((50 / 200) * 200), GetMouseHit().Location.Z);
+			FVector GridLoc = GetMouseHit().Location;
 			BuildingGhost->SetActorLocation(GridLoc);
 		}
 	}
@@ -93,12 +95,10 @@ FHitResult AGovernerPawn::GetMouseHit()
 {
 	FVector MouseLocation = FVector::ZeroVector;
 	FVector MouseDirection = FVector::ZeroVector;
-	UE_LOG(LogTemp, Log, TEXT("Prepare to Deproject"));
 	if (PC)
 	{
 		PC->DeprojectMousePositionToWorld(MouseLocation, MouseDirection);
 	}
-	UE_LOG(LogTemp, Log, TEXT("Deprojected"));
 	FHitResult HitResult;
 	FCollisionQueryParams QueryParams;
 	FVector TraceStart = MouseLocation;
@@ -148,13 +148,11 @@ void AGovernerPawn::SelectedForPlacement(const TSubclassOf<ABaseBuilding> Buildi
 {
 	if (BuildingToMake)
 	{
-		UE_LOG(LogTemp, Log, TEXT("Building to make found"));
 		CurrentBuildingType = BuildingToMake;
 		BuildingGhost = GetWorld()->SpawnActor<ABaseBuilding>(BuildingToMake);
 		BuildingGhost->BuildingMesh->SetMaterial(0, BuildingGhost->PlacingMaterial);
 		BuildingGhost->bGhostBuilding = true;
 		bPlacingBuilding = true;
-		UE_LOG(LogTemp, Log, TEXT("PlacingBuilding"));
 	}
 }
 
@@ -184,36 +182,42 @@ void AGovernerPawn::OnLeftClickPress()
 
 void AGovernerPawn::OnLeftClickRelease()
 {
-	// If we're placing a building
-	if (bPlacingBuilding)
+	// if we're set to build mode
+	if (bBuildMode)
 	{
-		// and if we aren't overlapping an actor
-		if (BuildingGhost->OverlappingActors.Num() < 1)
+		// If we're placing a building
+		if (bPlacingBuilding)
 		{
-			// and if we can afford to place a building
-			if (CurrentMoney >= BuildingGhost->Cost)
+			GEngine->AddOnScreenDebugMessage(0, 2.0f, FColor::Red, TEXT("PlacingBuilding"));
+			// and if we aren't overlapping an actor
+			if (BuildingGhost->OverlappingActors.Num() < 1)
 			{
-				// take away gold that it costs, and place the building
-				CurrentMoney = CurrentMoney - BuildingGhost->Cost;
-				FTransform NewTransform = BuildingGhost->GetTransform();
-				ABaseBuilding* NewBuilding = GetWorld()->SpawnActor<ABaseBuilding>(CurrentBuildingType, NewTransform);
-				NewBuilding->PlaceBuilding();
-				NewBuilding->SetOwner(this);
-
-				// if we're not holding shift, remove building ghost
-				if (!bBuildModifier)
+				// and if we can afford to place a building
+				if (CurrentMoney >= BuildingGhost->Cost)
 				{
-					if (BuildingGhost)
+					// take away gold that it costs, and place the building
+					CurrentMoney = CurrentMoney - BuildingGhost->Cost;
+					FTransform NewTransform = BuildingGhost->GetTransform();
+					ABaseBuilding* NewBuilding = GetWorld()->SpawnActor<ABaseBuilding>(CurrentBuildingType, NewTransform);
+					NewBuilding->PlaceBuilding();
+					NewBuilding->SetOwner(this);
+
+					// if we're not holding shift, remove building ghost
+					if (!bBuildModifier)
 					{
-						BuildingGhost->Destroy();
-						BuildingGhost = nullptr;
-						bPlacingBuilding = false;
-						CurrentBuildingType = nullptr;
-						NewBuilding = nullptr;
+						if (BuildingGhost)
+						{
+							BuildingGhost->Destroy();
+							BuildingGhost = nullptr;
+							bPlacingBuilding = false;
+							CurrentBuildingType = nullptr;
+							NewBuilding = nullptr;
+						}
 					}
 				}
 			}
 		}
+		bBuildMode = false;
 	}
 
 	bDraggingBuilding = false;
