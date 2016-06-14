@@ -57,7 +57,7 @@ void AGovernerPawn::Tick( float DeltaTime )
 			int32 Nearest = 500;
 			FVector Loc = FVector::ZeroVector;
 			// If we're using HMD (VR) controls
-			if (GEngine->HMDDevice.IsValid())
+			if (GEngine->HMDDevice.IsValid() && GEngine->HMDDevice->IsHeadTrackingAllowed())
 			{
 				Loc = GetHMDHit().Location;
 			}

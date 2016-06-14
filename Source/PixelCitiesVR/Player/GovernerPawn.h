@@ -5,6 +5,7 @@
 #include "GameFramework/Pawn.h"
 #include "Buildings/BaseBuilding.h"
 #include "GovernerController.h"
+#include "Runtime/HeadMountedDisplay/Public/HeadMountedDisplay.h"
 #include "GovernerPawn.generated.h"
 
 UCLASS()
