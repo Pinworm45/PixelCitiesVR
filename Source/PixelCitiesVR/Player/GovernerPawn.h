@@ -146,4 +146,6 @@ public:
 	UPROPERTY(BlueprintReadWrite, Category = "Controls")
 	bool bBuildMode;
 
+	float RoundToNearest(float Value, int32 Nearest);
+
 };

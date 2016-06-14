@@ -58,8 +58,10 @@ void AGovernerPawn::Tick( float DeltaTime )
 	{
 		if (BuildingGhost != nullptr)
 		{
-//			FVector GridLoc = FVector(GetMouseHit().Location.X + ((50 / 200) * 200), GetMouseHit().Location.Y + ((50 / 200) * 200), GetMouseHit().Location.Z);
-			FVector GridLoc = GetMouseHit().Location;
+			int32 Nearest = 500;
+			FVector Loc = GetMouseHit().Location;
+			FVector GridLoc = FVector(RoundToNearest(Loc.X, 500), RoundToNearest(Loc.Y, 500), Loc.Z);
+
 			BuildingGhost->SetActorLocation(GridLoc);
 		}
 	}
@@ -70,6 +72,16 @@ void AGovernerPawn::Tick( float DeltaTime )
 //		DistY = GetMouseHit().Location.Y - CurrentMouseLoc.Y;
 		//		UE_LOG(LogTemp, Log, TEXT("DistX %f"), DistX);
 	}
+}
+
+float AGovernerPawn::RoundToNearest(float Value, int32 Nearest)
+{
+	float OutVal = Value + 50;
+	int32 Floor = FMath::FloorToInt(OutVal);
+	Floor /= Nearest;
+	OutVal = Floor * Nearest;
+//	UE_LOG(LogTemp, Log, TEXT("OutVal = %f"), OutVal);
+	return OutVal;
 }
 
 // Called to bind functionality to input
@@ -137,7 +149,7 @@ void AGovernerPawn::Zoom(float Val)
 	if (bPlacingBuilding)
 	{
 		FRotator NewRotation = FRotator::ZeroRotator;
-		NewRotation.Yaw += Val * 15;
+		NewRotation.Yaw += Val * 90;
 		FRotator New = BuildingGhost->GetActorRotation() + NewRotation;
 		BuildingGhost->SetActorRotation(New);
 	}
