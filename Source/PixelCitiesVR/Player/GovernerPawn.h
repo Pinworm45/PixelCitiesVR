@@ -115,13 +115,15 @@ public:
 
 	// Called to cancel building placement
 	UFUNCTION(BlueprintCallable, Category = "Building")
-		void CancelPlacing();
+	void CancelPlacing();
 
+	// current population in city
 	UPROPERTY(BlueprintReadOnly, Category = "City")
-		int32 CurrentPopulation;
+	int32 CurrentPopulation;
 
-	UPROPERTY(BlueprintReadWrite, Category = "City")
-		int32 CurrentMoney;
+	// current money
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "City")
+	int32 CurrentMoney;
 
 	// store subclass of building
 	TSubclassOf<class ABaseBuilding> CurrentBuildingType;

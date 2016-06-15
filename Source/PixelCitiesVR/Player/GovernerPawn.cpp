@@ -211,7 +211,6 @@ void AGovernerPawn::OnLeftClickRelease()
 		// If we're placing a building
 		if (bPlacingBuilding)
 		{
-			GEngine->AddOnScreenDebugMessage(0, 2.0f, FColor::Red, TEXT("PlacingBuilding"));
 			// and if we aren't overlapping an actor
 			if (BuildingGhost->OverlappingActors.Num() < 1)
 			{
@@ -219,7 +218,7 @@ void AGovernerPawn::OnLeftClickRelease()
 				if (CurrentMoney >= BuildingGhost->Cost)
 				{
 					// take away gold that it costs, and place the building
-					CurrentMoney = CurrentMoney - BuildingGhost->Cost;
+					CurrentMoney -= BuildingGhost->Cost;
 					FTransform NewTransform = BuildingGhost->GetTransform();
 					ABaseBuilding* NewBuilding = GetWorld()->SpawnActor<ABaseBuilding>(CurrentBuildingType, NewTransform);
 					NewBuilding->PlaceBuilding();

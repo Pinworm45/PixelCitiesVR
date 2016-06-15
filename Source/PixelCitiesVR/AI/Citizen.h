@@ -5,6 +5,10 @@
 #include "GameFramework/Character.h"
 #include "Citizen.generated.h"
 
+// forward declarations
+class ABaseHouse;
+class ABaseBusiness;
+
 UCLASS()
 class PIXELCITIESVR_API ACitizen : public ACharacter
 {
@@ -30,5 +34,24 @@ public:
 	UPROPERTY(BlueprintReadWrite, Category = "Citizen Properties")
 	float Happiness;
 
-	
+	UPROPERTY(BlueprintReadWrite, Category = "Citizen Properties")
+	FString Name;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Citizen Properties")
+	ABaseHouse* MyHome;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Citizen Properties")
+	ABaseBusiness* MyWorkplace;
+
+
+	// Functions //
+
+	/** Sets the house for the citizen, and tells the house to add the citizen to its Residents array */
+	UFUNCTION(BlueprintCallable, Category = "Citizen")
+	void SetHouse(ABaseHouse* House);
+
+	/** Sets the workplace for the citizen, and tells the workplace to add the citizen to its Workers array */
+	UFUNCTION(BlueprintCallable, Category = "Citizen")
+	void SetWorkplace(ABaseBusiness* Workplace);
+
 };

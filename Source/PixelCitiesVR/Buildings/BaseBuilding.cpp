@@ -4,8 +4,6 @@
 #include "Player/GovernerPawn.h"
 #include "BaseBuilding.h"
 
-
-
 // Sets default values
 ABaseBuilding::ABaseBuilding(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
@@ -22,8 +20,6 @@ ABaseBuilding::ABaseBuilding(const FObjectInitializer& ObjectInitializer) : Supe
 	// On Actor End Overlap
 	OnActorEndOverlap.AddDynamic(this, &ABaseBuilding::OnEndOverlap);
 
-//	BuildingMesh->AttachParent = GetRootComponent();
-
 	bGhostBuilding = false;
 
 	// Set default costs and stats
@@ -31,6 +27,9 @@ ABaseBuilding::ABaseBuilding(const FObjectInitializer& ObjectInitializer) : Supe
 	BuildingProgress = 0;
 
 	DefaultMaterial = BuildingMesh->GetMaterial(0);
+
+	BuildingMesh->SetCollisionProfileName("BuildingCollision");
+
 }
 
 // Called when the game starts or when spawned
@@ -66,6 +65,7 @@ void ABaseBuilding::OnBeginOverlap(AActor* OverlappedActor, AActor* OtherActor)
 	if (bGhostBuilding)
 	{
 		BuildingMesh->SetRenderCustomDepth(true);
+		UE_LOG(LogBuilding, Log, TEXT("Colliding with building"));
 		OverlappingActors.AddUnique(OtherActor);
 	}
 }
@@ -75,6 +75,7 @@ void ABaseBuilding::OnEndOverlap(AActor* OverlappedActor, AActor* OtherActor)
 	OverlappingActors.Remove(OtherActor);
 	if (OverlappingActors.Num() < 1)
 	{
+		UE_LOG(LogBuilding, Log, TEXT("Collision end"));
 		BuildingMesh->SetRenderCustomDepth(false);
 	}
 }

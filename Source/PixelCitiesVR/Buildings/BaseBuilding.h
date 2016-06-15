@@ -8,7 +8,7 @@
 // forward declarations
 class AGovernerPawn;
 
-UCLASS()
+UCLASS(Abstract)
 class PIXELCITIESVR_API ABaseBuilding : public AActor
 {
 	GENERATED_BODY()
