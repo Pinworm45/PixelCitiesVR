@@ -37,6 +37,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Controls")
 	float ZoomSensitivity;
 
+	/** Scene comp */
+	UPROPERTY()
+	USceneComponent* SceneComp;
+
 	/** Camera arm */
 	UPROPERTY()
 	USpringArmComponent* CameraArm;

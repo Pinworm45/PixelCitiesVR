@@ -10,6 +10,8 @@ AGovernerPawn::AGovernerPawn(const FObjectInitializer& ObjectInitializer) : Supe
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	SceneComp = ObjectInitializer.CreateDefaultSubobject<USceneComponent>(this, TEXT("SceneComp"));
+
 	CameraArm = ObjectInitializer.CreateDefaultSubobject<USpringArmComponent>(this, TEXT("CameraArm"));
 	CameraArm->RelativeRotation.Pitch = -60.0f;
 	CameraArm->TargetArmLength = 1800;
@@ -19,9 +21,10 @@ AGovernerPawn::AGovernerPawn(const FObjectInitializer& ObjectInitializer) : Supe
 	CameraMinPitch = 15.0f;
 	CameraArm->bDoCollisionTest = false;
 	CameraArm->ProbeChannel = ECC_GameTraceChannel1;
+	CameraArm->AttachToComponent(SceneComp, FAttachmentTransformRules::SnapToTargetIncludingScale);
 
 	Camera = ObjectInitializer.CreateDefaultSubobject<UCameraComponent>(this, TEXT("Camera"));
-	Camera->AttachToComponent(CameraArm, FAttachmentTransformRules::KeepWorldTransform);
+	Camera->AttachToComponent(CameraArm, FAttachmentTransformRules::SnapToTargetIncludingScale);
 
 	MoveSensitivity = 30;
 	ZoomSensitivity = 150;
