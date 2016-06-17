@@ -39,6 +39,7 @@ AGovernerPawn::AGovernerPawn(const FObjectInitializer& ObjectInitializer) : Supe
 	bBuildMode = false;
 
 	TaxTime = 5.0f;
+	GridSize = 250;
 }
 
 // Called when the game starts or when spawned
@@ -62,8 +63,6 @@ void AGovernerPawn::Tick( float DeltaTime )
 	{
 		if (BuildingGhost != nullptr)
 		{
-			// nearest grid size to snap to
-			int32 Nearest = 500;
 			FVector Loc = FVector::ZeroVector;
 			// If we're using HMD (VR) controls
 			if (GEngine->HMDDevice.IsValid() && GEngine->HMDDevice->IsHeadTrackingAllowed())
@@ -77,7 +76,7 @@ void AGovernerPawn::Tick( float DeltaTime )
 			}
 
 			// set currently placing building to desired location
-			FVector GridLoc = FVector(RoundToNearest(Loc.X, 500), RoundToNearest(Loc.Y, 500), Loc.Z);
+			FVector GridLoc = FVector(RoundToNearest(Loc.X, GridSize), RoundToNearest(Loc.Y, GridSize), Loc.Z);
 			BuildingGhost->SetActorLocation(GridLoc);
 		}
 	}

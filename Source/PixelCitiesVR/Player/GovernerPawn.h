@@ -154,4 +154,7 @@ public:
 	FTimerHandle TimerHandle_TaxTimer;
 
 	void TaxTick();
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "City")
+	int32 GridSize;
 };
