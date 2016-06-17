@@ -7,6 +7,7 @@
 ABaseBusiness::ABaseBusiness(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
 	MaxWorkers = 4;
+	TaxAmount = 50;
 }
 
 void ABaseBusiness::PostInitializeComponents()

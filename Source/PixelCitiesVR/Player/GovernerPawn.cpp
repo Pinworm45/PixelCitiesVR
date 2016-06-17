@@ -14,8 +14,8 @@ AGovernerPawn::AGovernerPawn(const FObjectInitializer& ObjectInitializer) : Supe
 
 	CameraArm = ObjectInitializer.CreateDefaultSubobject<USpringArmComponent>(this, TEXT("CameraArm"));
 	CameraArm->RelativeRotation.Pitch = -60.0f;
-	CameraArm->TargetArmLength = 1800;
-	CameraArmMaxLength = 3600;
+	CameraArm->TargetArmLength = 3600;
+	CameraArmMaxLength = 10000;
 	CameraArmMinLength = 200;
 	CameraMaxPitch = 60.0f;
 	CameraMinPitch = 15.0f;
@@ -37,6 +37,8 @@ AGovernerPawn::AGovernerPawn(const FObjectInitializer& ObjectInitializer) : Supe
 
 	bBuildModifier = false;
 	bBuildMode = false;
+
+	TaxTime = 5.0f;
 }
 
 // Called when the game starts or when spawned
@@ -44,7 +46,11 @@ void AGovernerPawn::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	// get controller for later casts
 	PC = Cast<AGovernerController>(GetController());
+
+	// set up tax timer ticks
+	GetWorldTimerManager().SetTimer(TimerHandle_TaxTimer, this, &AGovernerPawn::TaxTick, TaxTime, true);
 }
 
 // Called every frame
@@ -237,12 +243,12 @@ void AGovernerPawn::OnLeftClickRelease()
 							bPlacingBuilding = false;
 							CurrentBuildingType = nullptr;
 							NewBuilding = nullptr;
+							bBuildMode = false;
 						}
 					}
 				}
 			}
 		}
-		bBuildMode = false;
 	}
 
 	bDraggingBuilding = false;
@@ -272,6 +278,7 @@ void AGovernerPawn::CancelPlacing()
 		BuildingGhost->Destroy();
 		BuildingGhost = nullptr;
 		CurrentBuildingType = nullptr;
+		bBuildMode = false;
 	}
 }
 
@@ -291,4 +298,18 @@ void AGovernerPawn::OnBuildModifierPress()
 void AGovernerPawn::OnBuildModifierRelease()
 {
 	bBuildModifier = false;
+}
+
+void AGovernerPawn::TaxTick()
+{
+	int32 TaxMoney = 0;
+	for (TActorIterator<ABaseBusiness> Business(GetWorld()); Business; ++Business)
+	{
+		if (!Business->bGhostBuilding)
+		{
+			TaxMoney += Business->TaxAmount;
+		}
+	}
+	CurrentMoney += TaxMoney;
+	UE_LOG(LogGovernment, Log, TEXT("Tax time! Money gained: %d, current money: %d"), TaxMoney, CurrentMoney);
 }

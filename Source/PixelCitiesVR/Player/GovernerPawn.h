@@ -4,6 +4,7 @@
 
 #include "GameFramework/Pawn.h"
 #include "Buildings/BaseBuilding.h"
+#include "Buildings/BaseBusiness.h"
 #include "GovernerController.h"
 #include "Runtime/HeadMountedDisplay/Public/HeadMountedDisplay.h"
 #include "GovernerPawn.generated.h"
@@ -146,4 +147,11 @@ public:
 
 	float RoundToNearest(float Value, int32 Nearest);
 
+	// time between each tax collection
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "City")
+	float TaxTime;
+
+	FTimerHandle TimerHandle_TaxTimer;
+
+	void TaxTick();
 };

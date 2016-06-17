@@ -39,4 +39,8 @@ public:
 	/** Removes the worker from the workers array */
 	UFUNCTION()
 	void RemoveWorker(ACitizen* Worker);
+
+	// Amount of money the building will give each tax tick
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Business")
+	int32 TaxAmount;
 };
