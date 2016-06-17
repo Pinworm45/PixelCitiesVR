@@ -228,7 +228,7 @@ void AGovernerPawn::OnLeftClickRelease()
 				{
 					// take away gold that it costs, and place the building
 					CurrentMoney -= BuildingGhost->Cost;
-					FTransform NewTransform = BuildingGhost->GetTransform();
+					FTransform NewTransform = FTransform(BuildingGhost->GetActorRotation(), BuildingGhost->GetActorLocation(), FVector(1, 1, 1));
 					ABaseBuilding* NewBuilding = GetWorld()->SpawnActor<ABaseBuilding>(CurrentBuildingType, NewTransform);
 					NewBuilding->PlaceBuilding();
 					NewBuilding->SetOwner(this);

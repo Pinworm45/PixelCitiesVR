@@ -14,6 +14,8 @@ ABaseBuilding::ABaseBuilding(const FObjectInitializer& ObjectInitializer) : Supe
 	BuildingMesh = ObjectInitializer.CreateDefaultSubobject<UStaticMeshComponent>(this, TEXT("BuildingMesh"));
 	RootComponent = BuildingMesh;
 
+	BuildingMesh->SetWorldScale3D(FVector(0.5f, 0.5f, 0.5f));
+
 	// On Actor Begin Overlap
 	OnActorBeginOverlap.AddDynamic(this, &ABaseBuilding::OnBeginOverlap);
 
