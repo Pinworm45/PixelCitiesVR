@@ -32,6 +32,12 @@ ABaseBuilding::ABaseBuilding(const FObjectInitializer& ObjectInitializer) : Supe
 
 	BuildingMesh->SetCollisionProfileName("BuildingCollision");
 
+	if (BuildingMeshes.Num() > 0)
+	{
+		BuildingMesh = BuildingMeshes[0];
+	}
+
+
 }
 
 // Called when the game starts or when spawned

@@ -24,13 +24,12 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaSeconds) override;
 
-	// Mesh for the building
-	UPROPERTY(VisibleDefaultsOnly, Category = "Graphics")
-	UStaticMeshComponent* BuildingMesh;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Graphics")
+	TArray<UStaticMeshComponent*> BuildingMeshes;
 
-	// Mesh for the building during construction
-	UPROPERTY(EditDefaultsOnly, Category = "Graphics")
-	UStaticMesh* ScaffoldMesh;
+	// Mesh for the building
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Graphics")
+	UStaticMeshComponent* BuildingMesh;
 
 	// Material while building is not yet placed
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Graphics")
@@ -71,5 +70,4 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Building")
 	void StartDeletion();
-	
 };

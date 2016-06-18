@@ -122,6 +122,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Building")
 	void CancelPlacing();
 
+	UFUNCTION(BlueprintCallable, Category = "Building")
+	void CycleBuildingMesh();
+
 	// current population in city
 	UPROPERTY(BlueprintReadOnly, Category = "City")
 	int32 CurrentPopulation;
@@ -157,4 +160,6 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "City")
 	int32 GridSize;
+
+	
 };

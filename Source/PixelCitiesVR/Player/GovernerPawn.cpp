@@ -10,7 +10,9 @@ AGovernerPawn::AGovernerPawn(const FObjectInitializer& ObjectInitializer) : Supe
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	
 	SceneComp = ObjectInitializer.CreateDefaultSubobject<USceneComponent>(this, TEXT("SceneComp"));
+	RootComponent = SceneComp;
 
 	CameraArm = ObjectInitializer.CreateDefaultSubobject<USpringArmComponent>(this, TEXT("CameraArm"));
 	CameraArm->RelativeRotation.Pitch = -60.0f;
@@ -311,4 +313,14 @@ void AGovernerPawn::TaxTick()
 	}
 	CurrentMoney += TaxMoney;
 	UE_LOG(LogGovernment, Log, TEXT("Tax time! Money gained: %d, current money: %d"), TaxMoney, CurrentMoney);
+}
+
+void AGovernerPawn::CycleBuildingMesh()
+{
+	if (BuildingGhost && BuildingGhost->BuildingMeshes.Num() > 1)
+	{
+		const int8 CurrentBuildingIdx = BuildingGhost->BuildingMeshes.IndexOfByKey(BuildingGhost->BuildingMesh);
+		BuildingGhost->BuildingMesh = BuildingGhost->BuildingMeshes[(CurrentBuildingIdx + 1) % BuildingGhost->BuildingMeshes.Num()];
+		UE_LOG(LogBuilding, Log, TEXT("Idx = %d"), CurrentBuildingIdx);
+	}
 }
